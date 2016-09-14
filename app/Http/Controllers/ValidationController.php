@@ -6,17 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 
-class PostController extends Controller {
+class ValidationController extends Controller {
 
-    /**
-     * Show the form to create a new blog post.
-     *
-     * @return Response
-     */
-    public function create() {
-        return view('post.create');
-    }
-
+    
     /**
      * Store a new blog post.
      *
@@ -24,7 +16,7 @@ class PostController extends Controller {
      * @return Response
      */
     public function store(Request $request) {
-
+       
         if (!empty($request->btnAccepted)) {
             $rules = array(
                 'checkbox' => 'accepted'
@@ -100,6 +92,30 @@ class PostController extends Controller {
             } else {
                 $request->session()->flash('alpha-num', array('class' => 'success',
                     'message' => 'alfa-num Validation rule has been passed by given textbox'));
+            }        
+        }else if (!empty($request->btnAlphaNum)) {
+            $rules = array(
+                'alpha-num' => 'required|alpha-num',
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $request->session()->flash('alpha-num', array('class' => 'danger',
+                    'message' => 'The filed must contains only Alfabets and numbers only'));
+            } else {
+                $request->session()->flash('alpha-num', array('class' => 'success',
+                    'message' => 'alfa-num Validation rule has been passed by given textbox'));
+            }        
+        }else if (!empty($request->btnArray)) {
+            $rules = array(
+                'array' => 'required|array',
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $request->session()->flash('array', array('class' => 'danger',
+                    'message' => 'The filed must contains a PHP array'));
+            } else {
+                $request->session()->flash('array', array('class' => 'success',
+                    'message' => 'array Validation rule has been passed by given textbox'));
             }
         }
         
